@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: docHead('Nueva contrasena')}"></head>
+<body>
+<nav th:replace="~{general/fragmentos :: header}"></nav>
+
+<div class="card card-auth p-4">
+    <h3 class="mb-1">Guardar nueva contrasena</h3>
+    <p class="text-muted" th:if="${codigoSimulado}">
+        Codigo enviado a <strong th:text="${correo}">correo@email.com</strong>:
+        <span class="badge bg-dark border border-secondary" th:text="${codigoSimulado}">000000</span>
+        <br/><small>(En produccion este codigo se enviaria por correo; para esta demo academica se muestra aqui.)</small>
+    </p>
+
+    <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+
+    <form th:action="@{/recuperar/confirmar}" method="post">
+        <div class="mb-3">
+            <label class="form-label">Ingresa el codigo recibido</label>
+            <input type="text" name="token" class="form-control" maxlength="6" required/>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Nueva contrasena</label>
+            <input type="password" name="nuevaContrasena" class="form-control" required/>
+        </div>
+        <button type="submit" class="btn btn-acr w-100">Guardar nueva contrasena</button>
+    </form>
+
+    <p class="text-center mt-3 mb-0">
+        <a th:href="@{/login}">&lt;- Volver al inicio de sesion</a>
+    </p>
+</div>
+
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+<div th:replace="~{general/fragmentos :: scripts}"></div>
+</body>
+</html>

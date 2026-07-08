@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--/* Fragmento "docHead": estilos comunes de todas las paginas (patron Semana 2).
+         Se llama "docHead" y no "head" para evitar que Thymeleaf lo confunda con
+         la etiqueta HTML <head> real que lo envuelve. */-->
+    <th:block th:fragment="docHead(titulo)">
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title th:text="${titulo} + ' - AutoCR Pro'">AutoCR Pro</title>
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}"/>
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css}"/>
+        <link rel="stylesheet" th:href="@{/css/theme.css}"/>
+    </th:block>
+</head>
+<body>
+
+<!--/* Fragmento "header": navbar publico, con buscador y estado de sesion */-->
+<nav th:fragment="header" class="navbar navbar-expand-lg navbar-autocr navbar-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">
+            <span class="brand-auto">AUTO</span><span class="brand-cr">CR</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navAutoCR">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navAutoCR">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/productos}">Productos</a></li>
+            </ul>
+            <form class="d-flex me-3" th:action="@{/productos}" method="get">
+                <input class="form-control me-2" type="search" name="nombre" placeholder="Buscar productos..."/>
+                <button class="btn btn-outline-acr" type="submit"><i class="bi bi-search"></i></button>
+            </form>
+            <ul class="navbar-nav align-items-lg-center gap-2">
+                <li class="nav-item">
+                    <a class="btn btn-outline-acr btn-sm" th:href="@{/carrito}">
+                        <i class="bi bi-cart"></i>
+                        Carrito
+                        <span class="badge bg-light text-dark" th:if="${session.carritoSesion != null and session.carritoSesion.cantidadTotalItems() gt 0}"
+                              th:text="${session.carritoSesion.cantidadTotalItems()}">0</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <div th:if="${session.usuarioId == null}">
+                        <a class="btn btn-acr btn-sm" th:href="@{/login}">Mi cuenta</a>
+                    </div>
+                    <div class="dropdown" th:if="${session.usuarioId != null}">
+                        <a class="btn btn-outline-acr btn-sm dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> <span th:text="${session.usuarioNombre}">Usuario</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li th:if="${session.usuarioRol != null and (session.usuarioRol == 'ADMINISTRADOR' or session.usuarioRol == 'VENDEDOR' or session.usuarioRol == 'INVENTARIO')}">
+                                <a class="dropdown-item" th:href="@{/admin/dashboard}">Panel administrativo</a>
+                            </li>
+                            <li><a class="dropdown-item" th:href="@{/logout}">Cerrar sesion</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!--/* Fragmento "toast": mensajes flash de exito/error */-->
+<div th:fragment="mensajes" style="position: fixed; top: 80px; right: 20px; z-index: 1080;">
+    <div class="toast align-items-center text-white bg-success border-0 show mb-2" role="alert" th:if="${mensaje}">
+        <div class="d-flex">
+            <div class="toast-body" th:text="${mensaje}">Mensaje</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+    <div class="toast align-items-center text-white bg-danger border-0 show mb-2" role="alert" th:if="${error}">
+        <div class="d-flex">
+            <div class="toast-body" th:text="${error}">Error</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+
+<!--/* Fragmento "footer" */-->
+<footer th:fragment="footer" class="footer-autocr text-center mt-5">
+    <div class="container">
+        <p class="mb-1">(c) 2026 AutoCR &middot; Santa Barbara de Heredia &middot; +506 8899-8541 &middot; autocr.ventas@gmail.com</p>
+        <p class="mb-0">SINPE &middot; Tarjeta &middot; Efectivo en tienda</p>
+    </div>
+</footer>
+
+<!--/* Fragmento "scripts": JS comun al final del body */-->
+<th:block th:fragment="scripts">
+    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/rutinas.js}"></script>
+</th:block>
+
+</body>
+</html>

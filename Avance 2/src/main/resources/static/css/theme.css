@@ -1,0 +1,247 @@
+/* ==========================================================
+   AutoCR Pro - Tema oscuro / rojo (fiel al diseno de Avance 1)
+   ========================================================== */
+
+:root {
+    --acr-bg: #0d0d0d;
+    --acr-bg-card: #1a1a1a;
+    --acr-bg-card-hover: #222222;
+    --acr-red: #e30613;
+    --acr-red-dark: #b30510;
+    --acr-border: #2b2b2b;
+    --acr-text-muted: #a8a8a8;
+}
+
+body {
+    background-color: var(--acr-bg);
+    color: #f2f2f2;
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+a {
+    color: var(--acr-red);
+}
+
+a:hover {
+    color: #ff2836;
+}
+
+/* ---------- Navbar ---------- */
+.navbar-autocr {
+    background-color: #000000;
+    border-bottom: 1px solid var(--acr-border);
+}
+
+.navbar-autocr .navbar-brand {
+    font-weight: 800;
+    letter-spacing: 1px;
+    font-size: 1.4rem;
+}
+
+.navbar-autocr .navbar-brand .brand-auto {
+    color: #ffffff;
+}
+
+.navbar-autocr .navbar-brand .brand-cr {
+    color: var(--acr-red);
+}
+
+.navbar-autocr .nav-link {
+    color: #e6e6e6 !important;
+}
+
+.navbar-autocr .nav-link:hover {
+    color: var(--acr-red) !important;
+}
+
+/* ---------- Botones ---------- */
+.btn-acr {
+    background-color: var(--acr-red);
+    border-color: var(--acr-red);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.btn-acr:hover, .btn-acr:focus {
+    background-color: var(--acr-red-dark);
+    border-color: var(--acr-red-dark);
+    color: #ffffff;
+}
+
+.btn-outline-acr {
+    background-color: transparent;
+    border: 1px solid var(--acr-red);
+    color: var(--acr-red);
+}
+
+.btn-outline-acr:hover {
+    background-color: var(--acr-red);
+    color: #ffffff;
+}
+
+/* ---------- Tarjetas de producto ---------- */
+.card-acr {
+    background-color: var(--acr-bg-card);
+    border: 1px solid var(--acr-border);
+    color: #f2f2f2;
+    transition: transform .15s ease, background-color .15s ease;
+}
+
+.card-acr:hover {
+    background-color: var(--acr-bg-card-hover);
+    transform: translateY(-3px);
+}
+
+.card-acr .card-img-top {
+    background-color: #0f0f0f;
+    object-fit: contain;
+    height: 180px;
+    padding: 0.75rem;
+}
+
+.card-acr .marca-tag {
+    color: var(--acr-red);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.card-acr .precio {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+/* ---------- Formularios ---------- */
+.form-control, .form-select {
+    background-color: #161616;
+    border: 1px solid var(--acr-border);
+    color: #f2f2f2;
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: #161616;
+    border-color: var(--acr-red);
+    color: #f2f2f2;
+    box-shadow: 0 0 0 0.2rem rgba(227, 6, 19, 0.25);
+}
+
+.form-control::placeholder {
+    color: var(--acr-text-muted);
+}
+
+.card-auth {
+    background-color: var(--acr-bg-card);
+    border: 1px solid var(--acr-border);
+    border-radius: 0.75rem;
+    max-width: 460px;
+    margin: 3rem auto;
+}
+
+/* ---------- Hero / banner de inicio ---------- */
+.hero-autocr {
+    background: linear-gradient(135deg, #1a0000 0%, #0d0d0d 60%);
+    border-bottom: 1px solid var(--acr-border);
+    padding: 3rem 0;
+}
+
+.hero-autocr .text-acr {
+    color: var(--acr-red);
+}
+
+/* ---------- Tablas admin ---------- */
+.table-acr {
+    --bs-table-bg: var(--acr-bg-card);
+    --bs-table-color: #f2f2f2;
+    --bs-table-border-color: var(--acr-border);
+}
+
+.badge-activo {
+    background-color: #1e7e34;
+}
+
+.badge-inactivo {
+    background-color: #6c757d;
+}
+
+.badge-stock-bajo {
+    background-color: var(--acr-red);
+}
+
+/* ---------- Sidebar admin ---------- */
+.sidebar-admin {
+    background-color: #000000;
+    min-height: calc(100vh - 56px);
+    border-right: 1px solid var(--acr-border);
+}
+
+.sidebar-admin .nav-link {
+    color: #cccccc;
+    padding: 0.6rem 1rem;
+}
+
+.sidebar-admin .nav-link.active,
+.sidebar-admin .nav-link:hover {
+    color: #ffffff;
+    background-color: var(--acr-red);
+    border-radius: 0.4rem;
+}
+
+.footer-autocr {
+    background-color: #000000;
+    border-top: 1px solid var(--acr-border);
+    color: var(--acr-text-muted);
+    padding: 1.5rem 0;
+    font-size: 0.9rem;
+}
+
+/* ---------- Contraste de textos grises sobre fondo oscuro ----------
+   Bootstrap define sus grises (text-muted, text-white-50, breadcrumbs,
+   hr, etc.) pensando en fondos claros. Se sobreescriben aqui las
+   variables y clases para que sean legibles sobre el tema oscuro. */
+:root {
+    --bs-secondary-color: #b8b8b8;
+    --bs-tertiary-color: #9a9a9a;
+    --bs-border-color: var(--acr-border);
+    --bs-body-color: #f2f2f2;
+    --bs-body-bg: var(--acr-bg);
+    --bs-emphasis-color: #ffffff;
+    --bs-heading-color: #ffffff;
+}
+
+.text-muted {
+    color: #b8b8b8 !important;
+}
+
+.text-white-50 {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.text-secondary {
+    color: #b8b8b8 !important;
+}
+
+.breadcrumb-item a {
+    color: #d9d9d9;
+}
+
+.breadcrumb-item.active {
+    color: #b8b8b8 !important;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    color: #777777;
+}
+
+hr {
+    opacity: 0.4;
+}
+
+::placeholder {
+    color: #8a8a8a !important;
+    opacity: 1;
+}
+
+label, .form-label {
+    color: #e6e6e6;
+}
