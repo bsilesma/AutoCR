@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: docHead('Checkout - Pago')}"></head>
+<body>
+<nav th:replace="~{general/fragmentos :: header}"></nav>
+<div th:replace="~{general/fragmentos :: mensajes}"></div>
+
+<div class="container my-4">
+    <p class="text-muted">1 Carrito &gt; 2 Entrega &gt; <strong class="text-white">3 Pago</strong> &gt; 4 Confirmacion</p>
+    <h2 class="mb-4">Metodo de pago</h2>
+
+    <div class="row">
+        <div class="col-12 col-lg-8">
+            <form th:action="@{/checkout/confirmar}" method="post" class="card-acr rounded p-4">
+                <div class="mb-3">
+                    <div class="form-check border border-secondary rounded p-3 mb-2">
+                        <input class="form-check-input" type="radio" name="metodoPago" id="sinpe" value="SINPE" checked/>
+                        <label class="form-check-label" for="sinpe">
+                            <strong>SINPE Movil</strong><br/>
+                            <span class="text-muted">Numero: 8899-8541, a nombre de AutoCR Costa Rica S.A.</span>
+                        </label>
+                    </div>
+                    <div class="form-check border border-secondary rounded p-3 mb-2">
+                        <input class="form-check-input" type="radio" name="metodoPago" id="tarjeta" value="TARJETA"/>
+                        <label class="form-check-label" for="tarjeta">
+                            <strong>Tarjeta credito/debito</strong><br/>
+                            <span class="text-muted">Visa, Mastercard</span>
+                        </label>
+                    </div>
+                    <div class="form-check border border-secondary rounded p-3">
+                        <input class="form-check-input" type="radio" name="metodoPago" id="efectivo" value="EFECTIVO"/>
+                        <label class="form-check-label" for="efectivo">
+                            <strong>Efectivo en tienda</strong><br/>
+                            <span class="text-muted">Solo retiro en tienda</span>
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-acr w-100">Confirmar pedido -&gt;</button>
+            </form>
+        </div>
+        <div class="col-12 col-lg-4">
+            <div class="card-acr rounded p-3">
+                <h5>Resumen del pedido</h5>
+                <div class="d-flex justify-content-between" th:each="item : ${carrito.items}">
+                    <span th:text="${item.nombreProducto} + ' x' + ${item.cantidad}">Producto</span>
+                    <span th:text="${'₡' + #numbers.formatDecimal(item.subtotal, 0, 'COMMA', 0, 'POINT')}">₡0</span>
+                </div>
+                <hr class="border-secondary"/>
+                <div class="d-flex justify-content-between fw-bold">
+                    <span>Total</span>
+                    <span th:text="${'₡' + #numbers.formatDecimal(carrito.calcularTotal(), 0, 'COMMA', 0, 'POINT')}">₡0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+<div th:replace="~{general/fragmentos :: scripts}"></div>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: docHead('Carrito')}"></head>
+<body>
+<nav th:replace="~{general/fragmentos :: header}"></nav>
+<div th:replace="~{general/fragmentos :: mensajes}"></div>
+
+<div class="container my-4">
+    <h2 class="mb-4">Tu carrito</h2>
+
+    <div th:if="${carrito.estaVacio()}" class="text-center py-5">
+        <p class="text-muted">Tu carrito esta vacio.</p>
+        <a class="btn btn-acr" th:href="@{/productos}">Ver productos</a>
+    </div>
+
+    <div class="row" th:unless="${carrito.estaVacio()}">
+        <div class="col-12 col-lg-8">
+            <table class="table table-acr align-middle">
+                <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${carrito.items}">
+                    <td class="d-flex align-items-center gap-2">
+                        <img th:src="${item.imagenUrl}" width="50" height="50" style="object-fit: contain; background:#0f0f0f;"/>
+                        <span th:text="${item.nombreProducto}">Producto</span>
+                    </td>
+                    <td th:text="${'₡' + #numbers.formatDecimal(item.precioUnitario, 0, 'COMMA', 0, 'POINT')}">₡0</td>
+                    <td style="width: 140px;">
+                        <form th:action="@{/carrito/actualizar}" method="post" class="d-flex gap-1">
+                            <input type="hidden" name="idProducto" th:value="${item.idProducto}"/>
+                            <input type="number" name="cantidad" class="form-control form-control-sm" th:value="${item.cantidad}" min="1"/>
+                            <button type="submit" class="btn btn-outline-acr btn-sm">Ok</button>
+                        </form>
+                    </td>
+                    <td th:text="${'₡' + #numbers.formatDecimal(item.subtotal, 0, 'COMMA', 0, 'POINT')}">₡0</td>
+                    <td>
+                        <form th:action="@{/carrito/eliminar}" method="post">
+                            <input type="hidden" name="idProducto" th:value="${item.idProducto}"/>
+                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-12 col-lg-4">
+            <div class="card-acr rounded p-3">
+                <h5>Resumen</h5>
+                <div class="d-flex justify-content-between">
+                    <span>Subtotal</span>
+                    <span th:text="${'₡' + #numbers.formatDecimal(carrito.calcularTotal(), 0, 'COMMA', 0, 'POINT')}">₡0</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted">
+                    <span>Envio</span>
+                    <span>Por calcular</span>
+                </div>
+                <hr class="border-secondary"/>
+                <div class="d-flex justify-content-between fw-bold">
+                    <span>Total</span>
+                    <span th:text="${'₡' + #numbers.formatDecimal(carrito.calcularTotal(), 0, 'COMMA', 0, 'POINT')}">₡0</span>
+                </div>
+                <a class="btn btn-acr w-100 mt-3" th:href="@{/checkout}">Proceder al pago -&gt;</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+<div th:replace="~{general/fragmentos :: scripts}"></div>
+</body>
+</html>

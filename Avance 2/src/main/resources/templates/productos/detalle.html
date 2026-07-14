@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: docHead(${producto.nombre})}"></head>
+<body>
+<nav th:replace="~{general/fragmentos :: header}"></nav>
+<div th:replace="~{general/fragmentos :: mensajes}"></div>
+
+<div class="container my-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/}">Inicio</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/productos}">Productos</a></li>
+            <li class="breadcrumb-item active" th:text="${producto.nombre}">Producto</li>
+        </ol>
+    </nav>
+
+    <div class="row g-4">
+        <div class="col-12 col-md-5">
+            <div class="card-acr rounded p-3 text-center">
+                <img th:src="${producto.imagenUrl}" class="img-fluid" style="max-height: 380px; object-fit: contain;" th:alt="${producto.nombre}"/>
+            </div>
+        </div>
+        <div class="col-12 col-md-7">
+            <div class="marca-tag" th:text="${producto.marca.nombre}">Marca</div>
+            <h2 th:text="${producto.nombre}">Nombre del producto</h2>
+            <p class="text-muted" th:text="${producto.categoria.nombre}">Categoria</p>
+            <h3 class="precio mb-3" th:text="${'₡' + #numbers.formatDecimal(producto.precio, 0, 'COMMA', 0, 'POINT')}">₡0</h3>
+
+            <p th:if="${producto.stock gt 0}" class="text-success"><i class="bi bi-check-circle"></i> En stock (<span th:text="${producto.stock}">0</span> disponibles)</p>
+            <p th:if="${producto.stock == 0}" class="text-danger"><i class="bi bi-x-circle"></i> Agotado</p>
+
+            <form th:action="@{/carrito/agregar}" method="post" class="d-flex align-items-center gap-2 mb-4" th:if="${producto.stock gt 0}">
+                <input type="hidden" name="idProducto" th:value="${producto.idProducto}"/>
+                <label class="form-label mb-0">Cantidad</label>
+                <input type="number" name="cantidad" class="form-control" style="width: 90px;" value="1" min="1" th:max="${producto.stock}"/>
+                <button type="submit" class="btn btn-acr">Agregar al carrito</button>
+            </form>
+
+            <hr class="border-secondary"/>
+            <h5>Descripcion</h5>
+            <p th:utext="${producto.descripcion}">Descripcion del producto.</p>
+
+            <p class="text-muted small">Entrega disponible en toda Costa Rica &middot; SINPE &middot; Tarjeta &middot; Efectivo en tienda</p>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+<div th:replace="~{general/fragmentos :: scripts}"></div>
+</body>
+</html>

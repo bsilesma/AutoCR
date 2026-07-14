@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: docHead('Productos')}"></head>
+<body>
+<nav th:replace="~{general/fragmentos :: header}"></nav>
+<div th:replace="~{general/fragmentos :: mensajes}"></div>
+
+<div class="container my-4">
+    <div class="row">
+        <!--/* H2: filtros de busqueda por nombre, marca y categoria */-->
+        <div class="col-12 col-lg-3 mb-4">
+            <form th:action="@{/productos}" method="get" class="p-3 card-acr rounded">
+                <h5 class="mb-3">Filtros</h5>
+                <div class="mb-3">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" class="form-control" name="nombre" th:value="${filtroNombre}" placeholder="Buscar..."/>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Marca</label>
+                    <select class="form-select" name="idMarca">
+                        <option value="">Todas</option>
+                        <option th:each="m : ${marcas}" th:value="${m.idMarca}" th:text="${m.nombre}"
+                                th:selected="${filtroMarca != null and filtroMarca == m.idMarca}"></option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Categoria</label>
+                    <select class="form-select" name="idCategoria">
+                        <option value="">Todas</option>
+                        <option th:each="c : ${categorias}" th:value="${c.idCategoria}" th:text="${c.nombre}"
+                                th:selected="${filtroCategoria != null and filtroCategoria == c.idCategoria}"></option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-acr w-100 mb-2">Aplicar filtros</button>
+                <a th:href="@{/productos}" class="btn btn-outline-acr w-100">Limpiar filtros</a>
+            </form>
+        </div>
+
+        <div class="col-12 col-lg-9">
+            <h4 class="mb-3" th:text="${#lists.size(productos)} + ' productos encontrados'">0 productos</h4>
+            <div class="row g-4">
+                <div class="col-6 col-md-4" th:each="p : ${productos}">
+                    <div class="card card-acr h-100">
+                        <a th:href="@{/productos/{id}(id=${p.idProducto})}">
+                            <img th:src="${p.imagenUrl}" class="card-img-top w-100" th:alt="${p.nombre}"/>
+                        </a>
+                        <div class="card-body d-flex flex-column">
+                            <div class="marca-tag" th:text="${p.marca.nombre}">Marca</div>
+                            <a class="text-decoration-none text-white" th:href="@{/productos/{id}(id=${p.idProducto})}">
+                                <p class="mb-1" th:text="${p.nombre}">Producto</p>
+                            </a>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="precio" th:text="${'₡' + #numbers.formatDecimal(p.precio, 0, 'COMMA', 0, 'POINT')}">₡0</span>
+                                <form th:action="@{/carrito/agregar}" method="post">
+                                    <input type="hidden" name="idProducto" th:value="${p.idProducto}"/>
+                                    <input type="hidden" name="cantidad" value="1"/>
+                                    <button type="submit" class="btn btn-acr btn-sm" th:disabled="${p.stock == 0}">+ Carrito</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p th:if="${#lists.isEmpty(productos)}" class="text-muted">No se encontraron productos con esos filtros.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+<div th:replace="~{general/fragmentos :: scripts}"></div>
+</body>
+</html>
