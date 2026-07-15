@@ -13,7 +13,7 @@
         </goals>
         <properties>
             <jpda.listen>true</jpda.listen>
-            <spring-boot.run.jvmArguments>-agentlib:jdwp=transport=dt_socket,server=n,suspend=n,address=${jpda.address}</spring-boot.run.jvmArguments>
+            <run.jvmArguments>-agentlib:jdwp=transport=dt_socket,server=n,suspend=n,address=${jpda.address}</run.jvmArguments>
         </properties>
     </action>
     <action>
