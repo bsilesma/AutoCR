@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: docHead('Detalle del pedido')}"></head>
+<body>
+<nav th:replace="~{general/fragmentos :: header}"></nav>
+<div th:replace="~{general/fragmentos :: mensajes}"></div>
+
+<main class="container py-5">
+    <a class="text-decoration-none" th:href="@{/admin/pedidos}">&larr; Volver a pedidos</a>
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 my-4">
+        <div>
+            <p class="text-muted mb-1">Orden</p>
+            <h1 class="mb-1" th:text="${pedido.numeroOrden}">ACR-0000</h1>
+            <span th:text="${#temporals.format(pedido.fecha, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+        </div>
+        <form class="d-flex gap-2" th:action="@{/admin/pedidos/{id}/estado(id=${pedido.idPedido})}" method="post">
+            <select class="form-select" name="estado" aria-label="Nuevo estado" required>
+                <option value="PENDIENTE" th:selected="${pedido.estado == 'PENDIENTE'}">Pendiente</option>
+                <option value="PROCESANDO" th:selected="${pedido.estado == 'PROCESANDO'}">Procesando</option>
+                <option value="ENTREGADO" th:selected="${pedido.estado == 'ENTREGADO'}">Entregado</option>
+                <option value="CANCELADO" th:selected="${pedido.estado == 'CANCELADO'}">Cancelado</option>
+            </select>
+            <button class="btn btn-acr" type="submit">Actualizar</button>
+        </form>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-lg-7">
+            <section class="card card-acr p-4 h-100">
+                <h2 class="h4">Productos</h2>
+                <div class="table-responsive">
+                    <table class="table table-acr align-middle mb-0">
+                        <thead><tr><th>Producto</th><th>Cantidad</th><th class="text-end">Subtotal</th></tr></thead>
+                        <tbody>
+                        <tr th:each="item : ${detalle}">
+                            <td th:text="${item.producto.nombre}">Producto</td>
+                            <td th:text="${item.cantidad}">1</td>
+                            <td class="text-end" th:text="${'₡' + #numbers.formatDecimal(item.subtotal, 0, 'COMMA', 0, 'POINT')}">₡0</td>
+                        </tr>
+                        </tbody>
+                        <tfoot><tr><th colspan="2">Total</th><th class="text-end" th:text="${'₡' + #numbers.formatDecimal(pedido.total, 0, 'COMMA', 0, 'POINT')}">₡0</th></tr></tfoot>
+                    </table>
+                </div>
+            </section>
+        </div>
+        <div class="col-lg-5">
+            <section class="card card-acr p-4 h-100">
+                <h2 class="h4">Entrega</h2>
+                <dl class="row mb-0">
+                    <dt class="col-sm-5">Cliente</dt><dd class="col-sm-7" th:text="${pedido.nombreEntrega}">Cliente</dd>
+                    <dt class="col-sm-5">Telefono</dt><dd class="col-sm-7" th:text="${pedido.telefonoEntrega}">Telefono</dd>
+                    <dt class="col-sm-5">Metodo</dt><dd class="col-sm-7" th:text="${pedido.metodoEntrega}">Metodo</dd>
+                    <dt class="col-sm-5">Pago</dt><dd class="col-sm-7" th:text="${pedido.metodoPago}">Pago</dd>
+                    <dt class="col-sm-5">Direccion</dt>
+                    <dd class="col-sm-7">
+                        <span th:text="${pedido.provincia + ', ' + pedido.canton + ', ' + pedido.distrito}">Ubicacion</span><br/>
+                        <span th:text="${pedido.direccionExacta}">Direccion</span>
+                    </dd>
+                </dl>
+            </section>
+        </div>
+    </div>
+
+    <section>
+        <h2 class="h4 mb-3">Historial de estados</h2>
+        <div class="table-responsive">
+            <table class="table table-acr">
+                <thead><tr><th>Fecha</th><th>Estado anterior</th><th>Estado nuevo</th></tr></thead>
+                <tbody>
+                <tr th:each="cambio : ${historial}">
+                    <td th:text="${#temporals.format(cambio.fecha, 'dd/MM/yyyy HH:mm')}">Fecha</td>
+                    <td th:text="${cambio.estadoAnterior ?: 'Pedido creado'}">Anterior</td>
+                    <td th:text="${cambio.estadoNuevo}">Nuevo</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+<div th:replace="~{general/fragmentos :: scripts}"></div>
+</body>
+</html>

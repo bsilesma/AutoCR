@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: docHead('Panel administrativo')}"></head>
+<body>
+<nav th:replace="~{general/fragmentos :: header}"></nav>
+<div th:replace="~{general/fragmentos :: mensajes}"></div>
+
+<main class="container py-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <p class="text-acr text-uppercase fw-bold mb-1">Administracion</p>
+            <h1 class="mb-0">Resumen general</h1>
+        </div>
+        <a class="btn btn-acr" th:href="@{/admin/pedidos}"><i class="bi bi-receipt"></i> Gestionar pedidos</a>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <section class="card card-acr h-100 p-4">
+                <span class="text-muted">Productos registrados</span>
+                <strong class="display-5" th:text="${totalProductos}">0</strong>
+            </section>
+        </div>
+        <div class="col-md-4">
+            <section class="card card-acr h-100 p-4">
+                <span class="text-muted">Pedidos totales</span>
+                <strong class="display-5" th:text="${totalPedidos}">0</strong>
+            </section>
+        </div>
+        <div class="col-md-4">
+            <section class="card card-acr h-100 p-4">
+                <span class="text-muted">Alertas de inventario</span>
+                <strong class="display-5 text-danger" th:text="${#lists.size(productosStockBajo)}">0</strong>
+            </section>
+        </div>
+    </div>
+
+    <section>
+        <h2 class="h4 mb-3">Productos con stock bajo</h2>
+        <div class="table-responsive">
+            <table class="table table-acr align-middle">
+                <thead><tr><th>Producto</th><th>Marca</th><th class="text-end">Stock</th></tr></thead>
+                <tbody>
+                <tr th:each="producto : ${productosStockBajo}">
+                    <td th:text="${producto.nombre}">Producto</td>
+                    <td th:text="${producto.marca.nombre}">Marca</td>
+                    <td class="text-end"><span class="badge badge-stock-bajo" th:text="${producto.stock}">0</span></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(productosStockBajo)}">
+                    <td colspan="3" class="text-center text-muted py-4">No hay alertas de inventario.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+<div th:replace="~{general/fragmentos :: scripts}"></div>
+</body>
+</html>
