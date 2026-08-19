@@ -31,8 +31,13 @@ public class AuthController {
     // ---------------- Login (H4) ----------------
 
     @GetMapping("/login")
-    public String loginForm(@RequestParam(value = "redirect", required = false) String redirect, Model model) {
+    public String loginForm(@RequestParam(value = "redirect", required = false) String redirect,
+                             @RequestParam(value = "googleNoConfigurado", required = false) Boolean googleNoConfigurado,
+                             Model model) {
         model.addAttribute("redirect", redirect);
+        if (Boolean.TRUE.equals(googleNoConfigurado)) {
+            model.addAttribute("error", "El inicio de sesion con Google todavia no esta configurado.");
+        }
         return "auth/login";
     }
 

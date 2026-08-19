@@ -11,7 +11,18 @@
 
     <div class="row">
         <div class="col-12 col-lg-8">
-            <form th:action="@{/checkout/entrega}" method="post" class="card-acr rounded p-4">
+            <div class="card-acr rounded p-3 mb-3" th:if="${not #lists.isEmpty(direccionesGuardadas)}">
+                <h6 class="mb-2">Usar una direccion guardada</h6>
+                <div class="d-flex flex-wrap gap-2">
+                    <button type="button" class="btn btn-sm btn-outline-acr" th:each="d : ${direccionesGuardadas}"
+                            onclick="usarDireccionGuardada(this)"
+                            th:attr="data-nombre=${d.nombreEntrega},data-telefono=${d.telefonoEntrega},data-provincia=${d.provincia},data-canton=${d.canton},data-distrito=${d.distrito},data-direccion=${d.direccionExacta},data-nota=${d.notaEntrega}">
+                        <i class="bi bi-geo-alt"></i> <span th:text="${d.etiqueta}">Casa</span>
+                    </button>
+                </div>
+            </div>
+
+            <form id="formEntrega" th:action="@{/checkout/entrega}" method="post" class="card-acr rounded p-4">
                 <div class="mb-3">
                     <label class="form-label">Nombre completo</label>
                     <input type="text" name="nombreEntrega" class="form-control" required/>
@@ -36,10 +47,15 @@
                     </div>
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-1">
                     <label class="form-label">Direccion exacta</label>
-                    <input type="text" name="direccionExacta" class="form-control" placeholder="100m norte del parque, casa azul..."/>
+                    <input type="text" name="direccionExacta" class="form-control js-autocomplete-direccion" placeholder="100m norte del parque, casa azul..."/>
+                    <input type="hidden" class="js-latitud"/>
+                    <input type="hidden" class="js-longitud"/>
                 </div>
+                <p class="text-muted small mb-3" th:if="${googleMapsApiKey == null or #strings.isEmpty(googleMapsApiKey)}">
+                    Autocompletado de Google Maps no configurado; escribi la direccion manualmente.
+                </p>
                 <div class="mb-3">
                     <label class="form-label">Nota para el repartidor (opcional)</label>
                     <input type="text" name="notaEntrega" class="form-control" placeholder="Ej: Tocar el timbre 2 veces..."/>
@@ -83,5 +99,6 @@
 
 <footer th:replace="~{general/fragmentos :: footer}"></footer>
 <div th:replace="~{general/fragmentos :: scripts}"></div>
+<div th:replace="~{general/fragmentos :: googleMapsScript}"></div>
 </body>
 </html>

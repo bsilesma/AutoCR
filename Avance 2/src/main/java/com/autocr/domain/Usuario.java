@@ -25,7 +25,7 @@ public class Usuario {
     @Column(name = "telefono", length = 30)
     private String telefono;
 
-    @Column(name = "contrasena", nullable = false, length = 100)
+    @Column(name = "contrasena", length = 100)
     private String contrasena;
 
     @Column(name = "activo", nullable = false)
@@ -33,6 +33,17 @@ public class Usuario {
 
     @Column(name = "fecha_registro", nullable = false)
     private LocalDateTime fechaRegistro = LocalDateTime.now();
+
+    /**
+     * LOCAL (correo + contrasena propia) o GOOGLE (inicio de sesion con
+     * cuenta de Google). Los usuarios GOOGLE no tienen contrasena local.
+     */
+    @Column(name = "proveedor_auth", nullable = false, length = 20,
+            columnDefinition = "VARCHAR(20) DEFAULT 'LOCAL'")
+    private String proveedorAuth = "LOCAL";
+
+    @Column(name = "google_id", unique = true, length = 60)
+    private String googleId;
 
     @ManyToOne
     @JoinColumn(name = "id_rol", nullable = false)
@@ -100,5 +111,21 @@ public class Usuario {
 
     public void setRol(Rol rol) {
         this.rol = rol;
+    }
+
+    public String getProveedorAuth() {
+        return proveedorAuth;
+    }
+
+    public void setProveedorAuth(String proveedorAuth) {
+        this.proveedorAuth = proveedorAuth;
+    }
+
+    public String getGoogleId() {
+        return googleId;
+    }
+
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
     }
 }

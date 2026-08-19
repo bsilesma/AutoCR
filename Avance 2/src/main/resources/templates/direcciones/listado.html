@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: docHead('Mis direcciones')}"></head>
+<body>
+<nav th:replace="~{general/fragmentos :: header}"></nav>
+<div th:replace="~{general/fragmentos :: mensajes}"></div>
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Mis direcciones</h2>
+        <a class="btn btn-acr" th:href="@{/mis-direcciones/nueva}"><i class="bi bi-plus-lg"></i> Nueva direccion</a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(direcciones)}" class="text-center py-5">
+        <p class="text-muted">Todavia no guardaste direcciones.</p>
+    </div>
+
+    <div class="row g-3" th:unless="${#lists.isEmpty(direcciones)}">
+        <div class="col-12 col-md-6" th:each="d : ${direcciones}">
+            <div class="card-acr rounded p-3 h-100 d-flex flex-column">
+                <div class="d-flex justify-content-between align-items-start">
+                    <h5 class="mb-1">
+                        <span th:text="${d.etiqueta}">Casa</span>
+                        <span class="badge badge-activo ms-1" th:if="${d.predeterminada}">Predeterminada</span>
+                    </h5>
+                </div>
+                <p class="mb-1" th:text="${d.nombreEntrega} + ' - ' + ${d.telefonoEntrega}">Nombre</p>
+                <p class="text-muted mb-1" th:text="${d.provincia} + ', ' + ${d.canton} + ', ' + ${d.distrito}">Ubicacion</p>
+                <p class="text-muted" th:text="${d.direccionExacta}">Direccion exacta</p>
+                <p class="text-success small" th:if="${d.latitud != null}"><i class="bi bi-geo-alt-fill"></i> Ubicacion validada con Google Maps</p>
+                <div class="mt-auto d-flex gap-2">
+                    <form th:action="@{/mis-direcciones/{id}/predeterminada(id=${d.idDireccion})}" method="post" th:unless="${d.predeterminada}">
+                        <button type="submit" class="btn btn-sm btn-outline-acr">Usar como predeterminada</button>
+                    </form>
+                    <form th:action="@{/mis-direcciones/{id}/eliminar(id=${d.idDireccion})}" method="post">
+                        <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+<div th:replace="~{general/fragmentos :: scripts}"></div>
+</body>
+</html>

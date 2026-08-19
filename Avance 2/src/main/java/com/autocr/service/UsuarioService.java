@@ -81,4 +81,34 @@ public class UsuarioService {
     public List<Usuario> listarTodos() {
         return usuarioRepository.findAll();
     }
+
+    /**
+     * Inicio de sesion con Google: reutiliza la cuenta si ya existe (por
+     * googleId o, si un cliente ya se habia registrado con ese correo de
+     * forma local, la vincula) o crea una cuenta CLIENTE nueva.
+     */
+    @Transactional
+    public Usuario autenticarOCrearConGoogle(String googleId, String correo, String nombre) {
+        String correoNormalizado = correo.trim().toLowerCase();
+
+        // Prioridad: primero por googleId, luego por correo, y si no existe se crea la cuenta.
+        Usuario usuario = usuarioRepository.findByGoogleId(googleId)
+                .or(() -> usuarioRepository.findByCorreo(correoNormalizado))
+                .orElseGet(() -> {
+                    Usuario nuevo = new Usuario();
+                    nuevo.setNombre(nombre != null && !nombre.isBlank() ? nombre : correoNormalizado);
+                    nuevo.setCorreo(correoNormalizado);
+                    nuevo.setActivo(true);
+                    nuevo.setRol(rolService.obtenerPorNombre("CLIENTE"));
+                    return nuevo;
+                });
+
+        if (!Boolean.TRUE.equals(usuario.getActivo())) {
+            throw new NegocioException("Esta cuenta esta desactivada.");
+        }
+
+        usuario.setGoogleId(googleId);
+        usuario.setProveedorAuth("GOOGLE");
+        return usuarioRepository.save(usuario);
+    }
 }

@@ -40,7 +40,14 @@
             <h4 class="mb-3" th:text="${#lists.size(productos)} + ' productos encontrados'">0 productos</h4>
             <div class="row g-4">
                 <div class="col-6 col-md-4" th:each="p : ${productos}">
-                    <div class="card card-acr h-100">
+                    <div class="card card-acr h-100 position-relative">
+                        <form th:action="@{/favoritos/toggle}" method="post" class="position-absolute top-0 end-0 m-2">
+                            <input type="hidden" name="idProducto" th:value="${p.idProducto}"/>
+                            <input type="hidden" name="redirect" th:value="@{/productos}"/>
+                            <button type="submit" class="btn btn-sm btn-fav" th:title="${idsFavoritos.contains(p.idProducto)} ? 'Quitar de favoritos' : 'Agregar a favoritos'">
+                                <i th:class="${idsFavoritos.contains(p.idProducto)} ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
+                            </button>
+                        </form>
                         <a th:href="@{/productos/{id}(id=${p.idProducto})}">
                             <img th:src="${p.imagenUrl}" class="card-img-top w-100" th:alt="${p.nombre}"/>
                         </a>

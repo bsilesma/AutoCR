@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: docHead('Detalle de pedido')}"></head>
+<body>
+<nav th:replace="~{general/fragmentos :: header}"></nav>
+<div th:replace="~{general/fragmentos :: mensajes}"></div>
+
+<div class="container my-4">
+    <a th:href="@{/mis-pedidos}" class="btn btn-sm btn-outline-acr mb-3"><i class="bi bi-arrow-left"></i> Volver a mis pedidos</a>
+    <h2 class="mb-4">Pedido <span th:text="${pedido.numeroOrden}">#ACR-0000</span></h2>
+
+    <div class="row g-4">
+        <div class="col-12 col-lg-7">
+            <div class="card-acr rounded p-3 mb-3">
+                <h5>Entrega</h5>
+                <p class="mb-1" th:text="${pedido.nombreEntrega} + ' - ' + ${pedido.telefonoEntrega}">Nombre</p>
+                <p class="mb-1" th:if="${pedido.metodoEntrega == 'DOMICILIO'}"
+                   th:text="${pedido.provincia} + ', ' + ${pedido.canton} + ', ' + ${pedido.distrito}">Ubicacion</p>
+                <p class="text-muted mb-0" th:text="${pedido.direccionExacta}">Direccion exacta</p>
+                <p class="text-muted" th:if="${pedido.metodoEntrega == 'TIENDA'}">Retiro en tienda</p>
+            </div>
+
+            <div class="card-acr rounded p-3">
+                <h5>Productos</h5>
+                <div class="d-flex justify-content-between mb-1" th:each="d : ${detalle}">
+                    <span th:text="${d.producto.nombre} + ' x' + ${d.cantidad}">Producto</span>
+                    <span th:text="${'₡' + #numbers.formatDecimal(d.subtotal, 0, 'COMMA', 0, 'POINT')}">₡0</span>
+                </div>
+                <hr class="border-secondary"/>
+                <div class="d-flex justify-content-between fw-bold">
+                    <span>Total</span>
+                    <span th:text="${'₡' + #numbers.formatDecimal(pedido.total, 0, 'COMMA', 0, 'POINT')}">₡0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-5">
+            <div class="card-acr rounded p-3 mb-3">
+                <h5>Estado</h5>
+                <p class="mb-0">Estado actual: <strong th:text="${pedido.estado}">PENDIENTE</strong></p>
+                <p class="text-muted mb-0">Metodo de pago: <span th:text="${pedido.metodoPago}">SINPE</span></p>
+            </div>
+
+            <div class="card-acr rounded p-3">
+                <h5>Trazabilidad</h5>
+                <ul class="list-unstyled mb-0">
+                    <li th:each="h : ${historial}" class="mb-1">
+                        <span class="text-muted" th:text="${#temporals.format(h.fecha, 'dd/MM/yyyy HH:mm')}">fecha</span>
+                        &mdash;
+                        <span th:text="${h.estadoAnterior} ?: 'creado'">anterior</span> &rarr;
+                        <strong th:text="${h.estadoNuevo}">nuevo</strong>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+<div th:replace="~{general/fragmentos :: scripts}"></div>
+</body>
+</html>

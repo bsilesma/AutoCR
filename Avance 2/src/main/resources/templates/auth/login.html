@@ -27,6 +27,12 @@
         <button type="submit" class="btn btn-acr w-100">Iniciar sesion</button>
     </form>
 
+    <div class="divisor-o my-3"><span>o</span></div>
+
+    <a th:href="@{/login/google(redirect=${redirect})}" class="btn btn-google w-100">
+        <i class="bi bi-google me-2"></i> Continuar con Google
+    </a>
+
     <p class="text-center mt-3 mb-0">
         No tenes cuenta? <a th:href="@{/registro}">Registrate gratis</a>
     </p>

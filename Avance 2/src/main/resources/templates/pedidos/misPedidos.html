@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: docHead('Mis pedidos')}"></head>
+<body>
+<nav th:replace="~{general/fragmentos :: header}"></nav>
+<div th:replace="~{general/fragmentos :: mensajes}"></div>
+
+<div class="container my-4">
+    <h2 class="mb-4">Mis pedidos</h2>
+
+    <div th:if="${#lists.isEmpty(pedidos)}" class="text-center py-5">
+        <p class="text-muted">Todavia no tenes pedidos.</p>
+        <a class="btn btn-acr" th:href="@{/productos}">Ver productos</a>
+    </div>
+
+    <div class="table-responsive" th:unless="${#lists.isEmpty(pedidos)}">
+        <table class="table table-acr align-middle">
+            <thead>
+            <tr>
+                <th>Orden</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="p : ${pedidos}">
+                <td th:text="${p.numeroOrden}">ACR-0000</td>
+                <td th:text="${#temporals.format(p.fecha, 'dd/MM/yyyy HH:mm')}">fecha</td>
+                <td>
+                    <span class="badge"
+                          th:classappend="${p.estado == 'ENTREGADO'} ? 'badge-activo' : (${p.estado == 'CANCELADO'} ? 'bg-secondary' : 'badge-stock-bajo')"
+                          th:text="${p.estado}">PENDIENTE</span>
+                </td>
+                <td th:text="${'₡' + #numbers.formatDecimal(p.total, 0, 'COMMA', 0, 'POINT')}">₡0</td>
+                <td>
+                    <a class="btn btn-sm btn-outline-acr" th:href="@{/mis-pedidos/{id}(id=${p.idPedido})}">Ver detalle</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+<div th:replace="~{general/fragmentos :: scripts}"></div>
+</body>
+</html>

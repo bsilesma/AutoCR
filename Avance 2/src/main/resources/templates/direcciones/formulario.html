@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: docHead('Nueva direccion')}"></head>
+<body>
+<nav th:replace="~{general/fragmentos :: header}"></nav>
+<div th:replace="~{general/fragmentos :: mensajes}"></div>
+
+<div class="container my-4">
+    <a th:href="@{/mis-direcciones}" class="btn btn-sm btn-outline-acr mb-3"><i class="bi bi-arrow-left"></i> Volver</a>
+    <h2 class="mb-4">Nueva direccion</h2>
+
+    <form th:action="@{/mis-direcciones}" method="post" class="card-acr rounded p-4" style="max-width: 640px;">
+        <div class="mb-3">
+            <label class="form-label">Etiqueta</label>
+            <input type="text" name="etiqueta" class="form-control" placeholder="Casa, Oficina..." required/>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Nombre de quien recibe</label>
+            <input type="text" name="nombreEntrega" class="form-control" required/>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Telefono</label>
+            <input type="text" name="telefonoEntrega" class="form-control" placeholder="+506 8888-8888" required/>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Provincia</label>
+                <input type="text" name="provincia" class="form-control"/>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Canton</label>
+                <input type="text" name="canton" class="form-control"/>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Distrito</label>
+                <input type="text" name="distrito" class="form-control"/>
+            </div>
+        </div>
+        <div class="mb-1">
+            <label class="form-label">Direccion exacta</label>
+            <input type="text" name="direccionExacta" class="form-control js-autocomplete-direccion"
+                   placeholder="Empeza a escribir para buscar con Google Maps..." required/>
+            <input type="hidden" name="latitud" class="js-latitud"/>
+            <input type="hidden" name="longitud" class="js-longitud"/>
+        </div>
+        <p class="text-muted small mb-3" th:if="${googleMapsApiKey == null or #strings.isEmpty(googleMapsApiKey)}">
+            El autocompletado con Google Maps no esta configurado todavia; podes escribir la direccion manualmente.
+        </p>
+        <div class="mb-3">
+            <label class="form-label">Nota (opcional)</label>
+            <input type="text" name="notaEntrega" class="form-control"/>
+        </div>
+        <div class="form-check mb-4">
+            <input class="form-check-input" type="checkbox" name="predeterminada" value="true" id="predeterminada"/>
+            <label class="form-check-label" for="predeterminada">Usar como direccion predeterminada</label>
+        </div>
+        <button type="submit" class="btn btn-acr w-100">Guardar direccion</button>
+    </form>
+</div>
+
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+<div th:replace="~{general/fragmentos :: scripts}"></div>
+<div th:replace="~{general/fragmentos :: googleMapsScript}"></div>
+</body>
+</html>

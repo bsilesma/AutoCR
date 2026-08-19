@@ -4,6 +4,7 @@ import com.autocr.carrito.CarritoSesion;
 import com.autocr.carrito.DatosEntregaSesion;
 import com.autocr.domain.Pedido;
 import com.autocr.domain.Usuario;
+import com.autocr.service.DireccionService;
 import com.autocr.service.PedidoService;
 import com.autocr.service.UsuarioService;
 import com.autocr.util.NegocioException;
@@ -33,6 +34,9 @@ public class CheckoutController {
     @Autowired
     private PedidoService pedidoService;
 
+    @Autowired
+    private DireccionService direccionService;
+
     @GetMapping("/checkout")
     public String entregaForm(HttpSession session, Model model) {
         String validacion = validarAccesoCheckout(session);
@@ -41,6 +45,8 @@ public class CheckoutController {
         }
         model.addAttribute("carrito", obtenerCarrito(session));
         model.addAttribute("entrega", new DatosEntregaSesion());
+        Long idUsuario = (Long) session.getAttribute(SessionKeys.USUARIO_ID);
+        model.addAttribute("direccionesGuardadas", direccionService.listarPorUsuario(idUsuario));
         return "checkout/entrega";
     }
 
