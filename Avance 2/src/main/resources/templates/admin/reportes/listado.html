@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: docHead('Reportes')}"></head>
+<body>
+<nav th:replace="~{admin/fragmentos :: headerAdmin}"></nav>
+<div th:replace="~{general/fragmentos :: mensajes}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="~{admin/fragmentos :: sidebar('reportes')}"></div>
+        <div class="col-12 col-md-9 col-lg-10 p-4">
+            <h2 class="mb-4">Reportes y metricas</h2>
+
+            <div class="row g-3 mb-4">
+                <div class="col-6 col-md-3">
+                    <div class="card-acr rounded p-3 text-center">
+                        <div class="fs-4 fw-bold" th:text="${'₡' + #numbers.formatDecimal(ingresosTotales, 0, 'COMMA', 0, 'POINT')}">₡0</div>
+                        <div class="text-muted">Ingresos totales (no cancelados)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-12 col-lg-7">
+                    <div class="card-acr rounded p-3 mb-4">
+                        <h5>Ventas ultimos 30 dias</h5>
+                        <canvas id="chartDias" height="110"></canvas>
+                    </div>
+                    <div class="card-acr rounded p-3">
+                        <h5>Ventas ultimos 12 meses</h5>
+                        <canvas id="chartMeses" height="110"></canvas>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5">
+                    <div class="card-acr rounded p-3 mb-4">
+                        <h5>Productos mas vendidos</h5>
+                        <canvas id="chartProductos" height="220"></canvas>
+                    </div>
+                    <div class="card-acr rounded p-3">
+                        <h5>Pedidos por estado</h5>
+                        <canvas id="chartEstados" height="220"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{general/fragmentos :: scripts}"></div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const ventasPorDia = /*[[${ventasPorDia}]]*/ [];
+    const ventasPorMes = /*[[${ventasPorMes}]]*/ [];
+    const topProductos = /*[[${topProductos}]]*/ [];
+    const ventasPorEstado = /*[[${ventasPorEstado}]]*/ [];
+    /*]]>*/
+
+    const colorRojo = '#e30613';
+    const colorGrisClaro = '#e6e6e6';
+    const opcionesComunes = {
+        scales: {
+            x: {ticks: {color: colorGrisClaro}, grid: {color: '#2b2b2b'}},
+            y: {ticks: {color: colorGrisClaro}, grid: {color: '#2b2b2b'}, beginAtZero: true}
+        },
+        plugins: {legend: {labels: {color: colorGrisClaro}}}
+    };
+
+    new Chart(document.getElementById('chartDias'), {
+        type: 'line',
+        data: {
+            labels: ventasPorDia.map(p => p.etiqueta),
+            datasets: [{label: 'Ventas (colones)', data: ventasPorDia.map(p => p.total), borderColor: colorRojo, backgroundColor: 'rgba(227,6,19,0.15)', fill: true, tension: 0.25}]
+        },
+        options: opcionesComunes
+    });
+
+    new Chart(document.getElementById('chartMeses'), {
+        type: 'bar',
+        data: {
+            labels: ventasPorMes.map(p => p.etiqueta),
+            datasets: [{label: 'Ventas (colones)', data: ventasPorMes.map(p => p.total), backgroundColor: colorRojo}]
+        },
+        options: opcionesComunes
+    });
+
+    new Chart(document.getElementById('chartProductos'), {
+        type: 'bar',
+        data: {
+            labels: topProductos.map(p => p.nombre),
+            datasets: [{label: 'Unidades vendidas', data: topProductos.map(p => p.cantidad), backgroundColor: colorRojo}]
+        },
+        options: {
+            indexAxis: 'y',
+            scales: opcionesComunes.scales,
+            plugins: opcionesComunes.plugins
+        }
+    });
+
+    new Chart(document.getElementById('chartEstados'), {
+        type: 'doughnut',
+        data: {
+            labels: ventasPorEstado.map(p => p.estado),
+            datasets: [{data: ventasPorEstado.map(p => p.cantidad), backgroundColor: ['#e30613', '#b30510', '#6c757d', '#1e7e34', '#ffc107']}]
+        },
+        options: {plugins: {legend: {labels: {color: colorGrisClaro}}}}
+    });
+</script>
+</body>
+</html>

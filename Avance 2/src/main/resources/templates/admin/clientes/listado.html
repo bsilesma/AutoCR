@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: docHead('Clientes')}"></head>
+<body>
+<nav th:replace="~{admin/fragmentos :: headerAdmin}"></nav>
+<div th:replace="~{general/fragmentos :: mensajes}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="~{admin/fragmentos :: sidebar('clientes')}"></div>
+        <div class="col-12 col-md-9 col-lg-10 p-4">
+            <h2 class="mb-4">Clientes</h2>
+
+            <table class="table table-acr align-middle">
+                <thead>
+                <tr><th>Nombre</th><th>Correo</th><th>Telefono</th><th>Registro</th><th>Pedidos</th><th>Total comprado</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="f : ${filas}">
+                    <td th:text="${f.usuario.nombre}">Nombre</td>
+                    <td th:text="${f.usuario.correo}">correo@email.com</td>
+                    <td th:text="${f.usuario.telefono}">Telefono</td>
+                    <td th:text="${#temporals.format(f.usuario.fechaRegistro, 'dd/MM/yyyy')}">fecha</td>
+                    <td th:text="${f.totalPedidos}">0</td>
+                    <td th:text="${'₡' + #numbers.formatDecimal(f.totalComprado, 0, 'COMMA', 0, 'POINT')}">₡0</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(filas)}"><td colspan="6" class="text-muted">Todavia no hay clientes registrados.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{general/fragmentos :: scripts}"></div>
+</body>
+</html>

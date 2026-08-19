@@ -79,7 +79,23 @@ public class UsuarioService {
 
     @Transactional(readOnly = true)
     public List<Usuario> listarTodos() {
-        return usuarioRepository.findAll();
+        return usuarioRepository.findAllByOrderByNombreAsc();
+    }
+
+    // ---------------- Administracion de usuarios y roles ----------------
+
+    @Transactional
+    public void cambiarRol(Long idUsuario, String nombreRol) {
+        Usuario usuario = buscarPorId(idUsuario);
+        usuario.setRol(rolService.obtenerPorNombre(nombreRol));
+        usuarioRepository.save(usuario);
+    }
+
+    @Transactional
+    public void cambiarEstado(Long idUsuario, boolean activo) {
+        Usuario usuario = buscarPorId(idUsuario);
+        usuario.setActivo(activo);
+        usuarioRepository.save(usuario);
     }
 
     /**

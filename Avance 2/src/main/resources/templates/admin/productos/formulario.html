@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: docHead(${producto.idProducto == null ? 'Nuevo producto' : 'Editar producto'})}"></head>
+<body>
+<nav th:replace="~{admin/fragmentos :: headerAdmin}"></nav>
+<div th:replace="~{general/fragmentos :: mensajes}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="~{admin/fragmentos :: sidebar('productos')}"></div>
+        <main class="col-12 col-md-9 col-lg-10 p-4">
+            <div class="card card-acr p-4 mx-auto" style="max-width: 900px;">
+                <h1 class="h3 mb-4" th:text="${producto.idProducto == null ? 'Nuevo producto' : 'Editar producto'}">Producto</h1>
+                <form th:action="@{/admin/productos/guardar}" method="post" class="row g-3">
+                    <input type="hidden" name="idProducto" th:value="${producto.idProducto}"/>
+                    <div class="col-12">
+                        <label class="form-label" for="nombre">Nombre</label>
+                        <input class="form-control" id="nombre" name="nombre" maxlength="150" required th:value="${producto.nombre}"/>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="idMarca">Marca</label>
+                        <select class="form-select" id="idMarca" name="idMarca" required>
+                            <option th:each="m : ${marcas}" th:value="${m.idMarca}" th:text="${m.nombre}"
+                                    th:selected="${producto.marca != null and producto.marca.idMarca == m.idMarca}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="idCategoria">Categoría</label>
+                        <select class="form-select" id="idCategoria" name="idCategoria" required>
+                            <option th:each="c : ${categorias}" th:value="${c.idCategoria}" th:text="${c.nombre}"
+                                    th:selected="${producto.categoria != null and producto.categoria.idCategoria == c.idCategoria}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="precio">Precio</label>
+                        <input class="form-control" id="precio" name="precio" type="number" min="0" step="0.01" required th:value="${producto.precio}"/>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="stock">Stock</label>
+                        <input class="form-control" id="stock" name="stock" type="number" min="0" required th:value="${producto.stock}"/>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="imagenUrl">URL de imagen</label>
+                        <input class="form-control" id="imagenUrl" name="imagenUrl" maxlength="500" th:value="${producto.imagenUrl}"/>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="descripcion">Descripción</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="4" th:text="${producto.descripcion}"></textarea>
+                    </div>
+                    <div class="col-12 form-check ms-2">
+                        <input class="form-check-input" id="destacado" name="destacado" type="checkbox" value="true" th:checked="${producto.destacado}">
+                        <label class="form-check-label" for="destacado">Mostrar como destacado</label>
+                    </div>
+                    <div class="col-12 d-flex gap-2">
+                        <button class="btn btn-acr" type="submit">Guardar</button>
+                        <a class="btn btn-outline-secondary" th:href="@{/admin/productos}">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</div>
+
+<div th:replace="~{general/fragmentos :: scripts}"></div>
+</body>
+</html>

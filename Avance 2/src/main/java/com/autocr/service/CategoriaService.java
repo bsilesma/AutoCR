@@ -33,6 +33,17 @@ public class CategoriaService {
 
     @Transactional
     public Categoria guardar(Categoria categoria) {
+        if (categoria.getNombre() == null || categoria.getNombre().isBlank()) {
+            throw new NegocioException("El nombre de la categoria es obligatorio.");
+        }
+        categoria.setNombre(categoria.getNombre().trim());
         return categoriaRepository.save(categoria);
+    }
+
+    @Transactional
+    public void cambiarEstado(Integer id, boolean activo) {
+        Categoria categoria = buscarPorId(id);
+        categoria.setActivo(activo);
+        categoriaRepository.save(categoria);
     }
 }

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: docHead('Marcas y categorias')}"></head>
+<body>
+<nav th:replace="~{admin/fragmentos :: headerAdmin}"></nav>
+<div th:replace="~{general/fragmentos :: mensajes}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="~{admin/fragmentos :: sidebar('marcasCategorias')}"></div>
+        <div class="col-12 col-md-9 col-lg-10 p-4">
+            <h2 class="mb-4">Marcas y categorias</h2>
+
+            <div class="row g-4">
+                <div class="col-12 col-lg-6">
+                    <div class="card-acr rounded p-3 mb-3">
+                        <h5>Nueva marca</h5>
+                        <form th:action="@{/admin/marcas-categorias/marcas}" method="post" class="d-flex gap-2">
+                            <input type="text" name="nombre" class="form-control" placeholder="Nombre de la marca" required/>
+                            <button type="submit" class="btn btn-acr">Agregar</button>
+                        </form>
+                    </div>
+                    <table class="table table-acr align-middle">
+                        <thead><tr><th>Marca</th><th>Estado</th><th>Accion</th></tr></thead>
+                        <tbody>
+                        <tr th:each="m : ${marcas}">
+                            <td th:text="${m.nombre}">Marca</td>
+                            <td>
+                                <span class="badge badge-activo" th:if="${m.activo}">Activa</span>
+                                <span class="badge badge-inactivo" th:unless="${m.activo}">Inactiva</span>
+                            </td>
+                            <td>
+                                <form th:action="@{/admin/marcas-categorias/marcas/{id}/desactivar(id=${m.idMarca})}" method="post" th:if="${m.activo}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Desactivar</button>
+                                </form>
+                                <form th:action="@{/admin/marcas-categorias/marcas/{id}/activar(id=${m.idMarca})}" method="post" th:unless="${m.activo}">
+                                    <button type="submit" class="btn btn-sm btn-outline-success">Activar</button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-12 col-lg-6">
+                    <div class="card-acr rounded p-3 mb-3">
+                        <h5>Nueva categoria</h5>
+                        <form th:action="@{/admin/marcas-categorias/categorias}" method="post" class="d-flex gap-2">
+                            <input type="text" name="nombre" class="form-control" placeholder="Nombre de la categoria" required/>
+                            <button type="submit" class="btn btn-acr">Agregar</button>
+                        </form>
+                    </div>
+                    <table class="table table-acr align-middle">
+                        <thead><tr><th>Categoria</th><th>Estado</th><th>Accion</th></tr></thead>
+                        <tbody>
+                        <tr th:each="c : ${categorias}">
+                            <td th:text="${c.nombre}">Categoria</td>
+                            <td>
+                                <span class="badge badge-activo" th:if="${c.activo}">Activa</span>
+                                <span class="badge badge-inactivo" th:unless="${c.activo}">Inactiva</span>
+                            </td>
+                            <td>
+                                <form th:action="@{/admin/marcas-categorias/categorias/{id}/desactivar(id=${c.idCategoria})}" method="post" th:if="${c.activo}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Desactivar</button>
+                                </form>
+                                <form th:action="@{/admin/marcas-categorias/categorias/{id}/activar(id=${c.idCategoria})}" method="post" th:unless="${c.activo}">
+                                    <button type="submit" class="btn btn-sm btn-outline-success">Activar</button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{general/fragmentos :: scripts}"></div>
+</body>
+</html>

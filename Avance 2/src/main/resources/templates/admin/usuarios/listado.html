@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: docHead('Usuarios y roles')}"></head>
+<body>
+<nav th:replace="~{admin/fragmentos :: headerAdmin}"></nav>
+<div th:replace="~{general/fragmentos :: mensajes}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="~{admin/fragmentos :: sidebar('usuarios')}"></div>
+        <div class="col-12 col-md-9 col-lg-10 p-4">
+            <h2 class="mb-4">Usuarios y roles</h2>
+
+            <table class="table table-acr align-middle">
+                <thead>
+                <tr><th>Nombre</th><th>Correo</th><th>Rol</th><th>Origen</th><th>Estado</th><th>Registro</th><th>Acciones</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="u : ${usuarios}">
+                    <td th:text="${u.nombre}">Nombre</td>
+                    <td th:text="${u.correo}">correo@email.com</td>
+                    <td>
+                        <form th:action="@{/admin/usuarios/{id}/rol(id=${u.idUsuario})}" method="post" class="d-flex gap-1">
+                            <select name="nombreRol" class="form-select form-select-sm" style="width: 150px;" onchange="this.form.submit()">
+                                <option th:each="r : ${roles}" th:value="${r.nombre}" th:text="${r.nombre}"
+                                        th:selected="${r.nombre == u.rol.nombre}"></option>
+                            </select>
+                        </form>
+                    </td>
+                    <td><span class="badge bg-secondary" th:text="${u.proveedorAuth}">LOCAL</span></td>
+                    <td>
+                        <span class="badge badge-activo" th:if="${u.activo}">Activo</span>
+                        <span class="badge badge-inactivo" th:unless="${u.activo}">Inactivo</span>
+                    </td>
+                    <td th:text="${#temporals.format(u.fechaRegistro, 'dd/MM/yyyy')}">fecha</td>
+                    <td>
+                        <form th:action="@{/admin/usuarios/{id}/desactivar(id=${u.idUsuario})}" method="post" th:if="${u.activo}">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Desactivar</button>
+                        </form>
+                        <form th:action="@{/admin/usuarios/{id}/activar(id=${u.idUsuario})}" method="post" th:unless="${u.activo}">
+                            <button type="submit" class="btn btn-sm btn-outline-success">Activar</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{general/fragmentos :: scripts}"></div>
+</body>
+</html>

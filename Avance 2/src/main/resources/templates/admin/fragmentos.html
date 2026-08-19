@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!--/* Navbar superior del panel administrativo */-->
+<nav th:fragment="headerAdmin" class="navbar navbar-expand navbar-autocr navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/admin/dashboard}">
+            <span class="brand-auto">AUTO</span><span class="brand-cr">CR</span>
+            <small class="text-white-50 ms-2" style="font-size: .8rem;">PANEL ADMINISTRATIVO</small>
+        </a>
+        <div class="ms-auto">
+            <span class="text-white me-3" th:text="${session.usuarioNombre}">Usuario</span>
+            <a class="btn btn-outline-acr btn-sm" th:href="@{/}"><i class="bi bi-shop"></i> Ver tienda</a>
+            <a class="btn btn-acr btn-sm" th:href="@{/logout}">Salir</a>
+        </div>
+    </div>
+</nav>
+
+<!--/* Menu lateral del panel administrativo (Semana 3: patron MVC con capas) */-->
+<div th:fragment="sidebar(activo)" class="col-12 col-md-3 col-lg-2 sidebar-admin p-3">
+    <ul class="nav flex-column gap-1">
+        <li class="nav-item">
+            <a class="nav-link" th:classappend="${activo == 'dashboard'} ? 'active'" th:href="@{/admin/dashboard}">
+                <i class="bi bi-speedometer2 me-1"></i> Dashboard
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:classappend="${activo == 'productos'} ? 'active'" th:href="@{/admin/productos}">
+                <i class="bi bi-box-seam me-1"></i> Productos
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:classappend="${activo == 'pedidos'} ? 'active'" th:href="@{/admin/pedidos}">
+                <i class="bi bi-receipt me-1"></i> Pedidos
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:classappend="${activo == 'clientes'} ? 'active'" th:href="@{/admin/clientes}">
+                <i class="bi bi-people me-1"></i> Clientes
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:classappend="${activo == 'marcasCategorias'} ? 'active'" th:href="@{/admin/marcas-categorias}">
+                <i class="bi bi-tags me-1"></i> Marcas y Cat.
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:classappend="${activo == 'inventario'} ? 'active'" th:href="@{/admin/inventario}">
+                <i class="bi bi-boxes me-1"></i> Inventario
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:classappend="${activo == 'reportes'} ? 'active'" th:href="@{/admin/reportes}">
+                <i class="bi bi-graph-up me-1"></i> Reportes
+            </a>
+        </li>
+        <li class="nav-item" th:if="${session.usuarioRol == 'ADMINISTRADOR'}">
+            <a class="nav-link" th:classappend="${activo == 'usuarios'} ? 'active'" th:href="@{/admin/usuarios}">
+                <i class="bi bi-shield-lock me-1"></i> Usuarios y Roles
+            </a>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>

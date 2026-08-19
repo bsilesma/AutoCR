@@ -33,6 +33,17 @@ public class MarcaService {
 
     @Transactional
     public Marca guardar(Marca marca) {
+        if (marca.getNombre() == null || marca.getNombre().isBlank()) {
+            throw new NegocioException("El nombre de la marca es obligatorio.");
+        }
+        marca.setNombre(marca.getNombre().trim());
         return marcaRepository.save(marca);
+    }
+
+    @Transactional
+    public void cambiarEstado(Integer id, boolean activo) {
+        Marca marca = buscarPorId(id);
+        marca.setActivo(activo);
+        marcaRepository.save(marca);
     }
 }

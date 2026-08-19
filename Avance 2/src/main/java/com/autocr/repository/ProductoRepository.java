@@ -1,6 +1,7 @@
 package com.autocr.repository;
 
 import com.autocr.domain.Producto;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -8,6 +9,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
+
+    @EntityGraph(attributePaths = {"marca", "categoria"})
+    List<Producto> findAllByOrderByNombreAsc();
 
     List<Producto> findByActivoTrueAndDestacadoTrue();
 
