@@ -26,42 +26,53 @@
         </button>
         <div class="collapse navbar-collapse" id="navAutoCR">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/productos}">Productos</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/}" th:text="#{nav.inicio}">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/productos}" th:text="#{nav.productos}">Productos</a></li>
             </ul>
             <form class="d-flex me-3" th:action="@{/productos}" method="get">
-                <input class="form-control me-2" type="search" name="nombre" placeholder="Buscar productos..."/>
+                <input class="form-control me-2" type="search" name="nombre" th:placeholder="#{nav.buscar}"/>
                 <button class="btn btn-outline-acr" type="submit"><i class="bi bi-search"></i></button>
             </form>
             <ul class="navbar-nav align-items-lg-center gap-2">
                 <li class="nav-item">
+                    <div class="dropdown">
+                        <a class="btn btn-outline-acr btn-sm dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-translate"></i> <span th:text="${#locale.language == 'en'} ? 'EN' : 'ES'">ES</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" th:href="@{/(lang='es')}">Espanol</a></li>
+                            <li><a class="dropdown-item" th:href="@{/(lang='en')}">English</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
                     <a class="btn btn-outline-acr btn-sm" th:href="@{/carrito}">
                         <i class="bi bi-cart"></i>
-                        Carrito
+                        <span th:text="#{nav.carrito}">Carrito</span>
                         <span class="badge bg-light text-dark" th:if="${session.carritoSesion != null and session.carritoSesion.cantidadTotalItems() gt 0}"
                               th:text="${session.carritoSesion.cantidadTotalItems()}">0</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <div th:if="${session.usuarioId == null}">
-                        <a class="btn btn-acr btn-sm" th:href="@{/login}">Mi cuenta</a>
+                        <a class="btn btn-acr btn-sm" th:href="@{/login}" th:text="#{nav.micuenta}">Mi cuenta</a>
                     </div>
                     <div class="dropdown" th:if="${session.usuarioId != null}">
                         <a class="btn btn-outline-acr btn-sm dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="bi bi-person-circle"></i> <span th:text="${session.usuarioNombre}">Usuario</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" th:href="@{/mis-pedidos}"><i class="bi bi-receipt me-1"></i> Mis pedidos</a></li>
-                            <li><a class="dropdown-item" th:href="@{/favoritos}"><i class="bi bi-heart me-1"></i> Favoritos</a></li>
-                            <li><a class="dropdown-item" th:href="@{/mis-direcciones}"><i class="bi bi-geo-alt me-1"></i> Mis direcciones</a></li>
+                            <li><a class="dropdown-item" th:href="@{/mis-pedidos}"><i class="bi bi-receipt me-1"></i> <span th:text="#{nav.mispedidos}">Mis pedidos</span></a></li>
+                            <li><a class="dropdown-item" th:href="@{/favoritos}"><i class="bi bi-heart me-1"></i> <span th:text="#{nav.favoritos}">Favoritos</span></a></li>
+                            <li><a class="dropdown-item" th:href="@{/mis-direcciones}"><i class="bi bi-geo-alt me-1"></i> <span th:text="#{nav.misdirecciones}">Mis direcciones</span></a></li>
                             <li th:if="${session.usuarioRol != null and (session.usuarioRol == 'ADMINISTRADOR' or session.usuarioRol == 'VENDEDOR' or session.usuarioRol == 'INVENTARIO')}">
                                 <hr class="dropdown-divider"/>
                             </li>
                             <li th:if="${session.usuarioRol != null and (session.usuarioRol == 'ADMINISTRADOR' or session.usuarioRol == 'VENDEDOR' or session.usuarioRol == 'INVENTARIO')}">
-                                <a class="dropdown-item" th:href="@{/admin/dashboard}">Panel administrativo</a>
+                                <a class="dropdown-item" th:href="@{/admin/dashboard}" th:text="#{nav.paneladmin}">Panel administrativo</a>
                             </li>
                             <li><hr class="dropdown-divider"/></li>
-                            <li><a class="dropdown-item" th:href="@{/logout}">Cerrar sesion</a></li>
+                            <li><a class="dropdown-item" th:href="@{/logout}" th:text="#{nav.cerrarsesion}">Cerrar sesion</a></li>
                         </ul>
                     </div>
                 </li>
@@ -89,8 +100,8 @@
 <!--/* Fragmento "footer" */-->
 <footer th:fragment="footer" class="footer-autocr text-center mt-5">
     <div class="container">
-        <p class="mb-1">(c) 2026 AutoCR &middot; Santa Barbara de Heredia &middot; +506 8899-8541 &middot; autocr.ventas@gmail.com</p>
-        <p class="mb-0">SINPE &middot; Tarjeta &middot; Efectivo en tienda</p>
+        <p class="mb-1">(c) 2026 AutoCR &middot; <span th:text="#{footer.direccion}">Santa Barbara de Heredia</span> &middot; +506 8899-8541 &middot; autocr.ventas@gmail.com</p>
+        <p class="mb-0" th:text="#{footer.metodos}">SINPE · Tarjeta · Efectivo en tienda</p>
     </div>
 </footer>
 

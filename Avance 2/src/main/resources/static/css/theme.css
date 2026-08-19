@@ -20,10 +20,39 @@ body {
 
 a {
     color: var(--acr-red);
+    transition: color .15s ease;
 }
 
 a:hover {
     color: #ff2836;
+}
+
+::selection {
+    background-color: var(--acr-red);
+    color: #ffffff;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--acr-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3a3a3a;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--acr-red);
+}
+
+.btn:focus-visible, .form-control:focus-visible, a:focus-visible {
+    outline: 2px solid var(--acr-red);
+    outline-offset: 2px;
 }
 
 /* ---------- Navbar ---------- */
@@ -60,23 +89,50 @@ a:hover {
     border-color: var(--acr-red);
     color: #ffffff;
     font-weight: 600;
+    transition: background-color .15s ease, border-color .15s ease, transform .1s ease, box-shadow .15s ease;
 }
 
 .btn-acr:hover, .btn-acr:focus {
     background-color: var(--acr-red-dark);
     border-color: var(--acr-red-dark);
     color: #ffffff;
+    box-shadow: 0 4px 14px rgba(227, 6, 19, 0.35);
+    transform: translateY(-1px);
+}
+
+.btn-acr:active {
+    transform: translateY(0);
+    box-shadow: none;
 }
 
 .btn-outline-acr {
     background-color: transparent;
     border: 1px solid var(--acr-red);
     color: var(--acr-red);
+    transition: background-color .15s ease, color .15s ease, transform .1s ease;
 }
 
 .btn-outline-acr:hover {
     background-color: var(--acr-red);
     color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.badge-marca {
+    background-color: var(--acr-bg-card);
+    border: 1px solid var(--acr-border);
+    color: #e6e6e6 !important;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all .15s ease;
+    display: inline-block;
+}
+
+.badge-marca:hover {
+    background-color: var(--acr-red);
+    border-color: var(--acr-red);
+    color: #ffffff !important;
+    transform: translateY(-2px);
 }
 
 /* ---------- Tarjetas de producto ---------- */
@@ -84,12 +140,15 @@ a:hover {
     background-color: var(--acr-bg-card);
     border: 1px solid var(--acr-border);
     color: #f2f2f2;
-    transition: transform .15s ease, background-color .15s ease;
+    overflow: hidden;
+    transition: transform .2s ease, background-color .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
 
 .card-acr:hover {
     background-color: var(--acr-bg-card-hover);
-    transform: translateY(-3px);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+    border-color: #3a3a3a;
 }
 
 .card-acr .card-img-top {
@@ -97,6 +156,11 @@ a:hover {
     object-fit: contain;
     height: 180px;
     padding: 0.75rem;
+    transition: transform .25s ease;
+}
+
+.card-acr:hover .card-img-top {
+    transform: scale(1.04);
 }
 
 .card-acr .marca-tag {
@@ -188,13 +252,20 @@ a:hover {
 
 /* ---------- Hero / banner de inicio ---------- */
 .hero-autocr {
-    background: linear-gradient(135deg, #1a0000 0%, #0d0d0d 60%);
+    background:
+        radial-gradient(ellipse 60% 100% at 50% 0%, rgba(227, 6, 19, 0.18) 0%, rgba(227, 6, 19, 0) 70%),
+        linear-gradient(135deg, #1a0000 0%, #0d0d0d 60%);
     border-bottom: 1px solid var(--acr-border);
-    padding: 3rem 0;
+    padding: 4rem 0;
+}
+
+.hero-autocr h1 {
+    letter-spacing: -0.02em;
 }
 
 .hero-autocr .text-acr {
     color: var(--acr-red);
+    text-shadow: 0 0 30px rgba(227, 6, 19, 0.35);
 }
 
 /* ---------- Tablas admin ---------- */

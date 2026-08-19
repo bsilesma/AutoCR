@@ -31,15 +31,40 @@ CREATE TABLE IF NOT EXISTS usuario (
     nombre VARCHAR(120) NOT NULL,
     correo VARCHAR(150) NOT NULL,
     telefono VARCHAR(30) NULL,
-    contrasena VARCHAR(100) NOT NULL,
+    contrasena VARCHAR(100) NULL,
     activo BOOLEAN NOT NULL DEFAULT TRUE,
     fecha_registro DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    proveedor_auth VARCHAR(20) NOT NULL DEFAULT 'LOCAL',
+    google_id VARCHAR(60) NULL,
     id_rol INT NOT NULL,
     PRIMARY KEY (id_usuario),
     CONSTRAINT uk_usuario_correo UNIQUE (correo),
+    CONSTRAINT uk_usuario_google_id UNIQUE (google_id),
+    CONSTRAINT chk_usuario_proveedor CHECK (proveedor_auth IN ('LOCAL', 'GOOGLE')),
     CONSTRAINT fk_usuario_rol FOREIGN KEY (id_rol)
         REFERENCES rol (id_rol)
         ON UPDATE RESTRICT ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS direccion (
+    id_direccion BIGINT NOT NULL AUTO_INCREMENT,
+    id_usuario BIGINT NOT NULL,
+    etiqueta VARCHAR(40) NOT NULL,
+    nombre_entrega VARCHAR(150) NOT NULL,
+    telefono_entrega VARCHAR(30) NOT NULL,
+    provincia VARCHAR(60) NULL,
+    canton VARCHAR(60) NULL,
+    distrito VARCHAR(60) NULL,
+    direccion_exacta TEXT NOT NULL,
+    nota_entrega TEXT NULL,
+    latitud DOUBLE NULL,
+    longitud DOUBLE NULL,
+    predeterminada BOOLEAN NOT NULL DEFAULT FALSE,
+    PRIMARY KEY (id_direccion),
+    CONSTRAINT fk_direccion_usuario FOREIGN KEY (id_usuario)
+        REFERENCES usuario (id_usuario)
+        ON UPDATE RESTRICT ON DELETE CASCADE,
+    INDEX idx_direccion_usuario (id_usuario)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS marca (
@@ -94,6 +119,22 @@ CREATE TABLE IF NOT EXISTS carrito (
         REFERENCES usuario (id_usuario)
         ON UPDATE RESTRICT ON DELETE RESTRICT,
     INDEX idx_carrito_usuario (id_usuario)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS favorito (
+    id_favorito BIGINT NOT NULL AUTO_INCREMENT,
+    id_usuario BIGINT NOT NULL,
+    id_producto BIGINT NOT NULL,
+    fecha_agregado DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    PRIMARY KEY (id_favorito),
+    CONSTRAINT uk_favorito_usuario_producto UNIQUE (id_usuario, id_producto),
+    CONSTRAINT fk_favorito_usuario FOREIGN KEY (id_usuario)
+        REFERENCES usuario (id_usuario)
+        ON UPDATE RESTRICT ON DELETE CASCADE,
+    CONSTRAINT fk_favorito_producto FOREIGN KEY (id_producto)
+        REFERENCES producto (id_producto)
+        ON UPDATE RESTRICT ON DELETE CASCADE,
+    INDEX idx_favorito_producto (id_producto)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS carrito_item (

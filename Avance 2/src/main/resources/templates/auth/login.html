@@ -5,8 +5,8 @@
 <nav th:replace="~{general/fragmentos :: header}"></nav>
 
 <div class="card card-auth p-4">
-    <h3 class="mb-1">Bienvenido de vuelta</h3>
-    <p class="text-muted">Ingresa a tu cuenta para continuar</p>
+    <h3 class="mb-1" th:text="#{login.titulo}">Bienvenido de vuelta</h3>
+    <p class="text-muted" th:text="#{login.subtitulo}">Ingresa a tu cuenta para continuar</p>
 
     <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
     <div class="alert alert-success" th:if="${mensaje}" th:text="${mensaje}"></div>
@@ -14,27 +14,27 @@
     <form th:action="@{/login}" method="post">
         <input type="hidden" name="redirect" th:value="${redirect}"/>
         <div class="mb-3">
-            <label class="form-label">Correo</label>
+            <label class="form-label" th:text="#{login.correo}">Correo</label>
             <input type="email" name="correo" class="form-control" placeholder="correo@email.com" required/>
         </div>
         <div class="mb-2">
-            <label class="form-label">Contrasena</label>
+            <label class="form-label" th:text="#{login.contrasena}">Contrasena</label>
             <input type="password" name="contrasena" class="form-control" placeholder="**********" required/>
         </div>
         <div class="text-end mb-3">
-            <a th:href="@{/recuperar}" class="small">Olvide mi contrasena?</a>
+            <a th:href="@{/recuperar}" class="small" th:text="#{login.olvidecontrasena}">Olvide mi contrasena?</a>
         </div>
-        <button type="submit" class="btn btn-acr w-100">Iniciar sesion</button>
+        <button type="submit" class="btn btn-acr w-100" th:text="#{login.iniciarsesion}">Iniciar sesion</button>
     </form>
 
-    <div class="divisor-o my-3"><span>o</span></div>
+    <div class="divisor-o my-3"><span th:text="#{login.o}">o</span></div>
 
     <a th:href="@{/login/google(redirect=${redirect})}" class="btn btn-google w-100">
-        <i class="bi bi-google me-2"></i> Continuar con Google
+        <i class="bi bi-google me-2"></i> <span th:text="#{login.google}">Continuar con Google</span>
     </a>
 
     <p class="text-center mt-3 mb-0">
-        No tenes cuenta? <a th:href="@{/registro}">Registrate gratis</a>
+        <span th:text="#{login.notienecuenta}">No tenes cuenta?</span> <a th:href="@{/registro}" th:text="#{login.registrate}">Registrate gratis</a>
     </p>
 </div>
 

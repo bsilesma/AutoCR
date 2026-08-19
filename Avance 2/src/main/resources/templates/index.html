@@ -7,19 +7,20 @@
 
 <section class="hero-autocr text-center">
     <div class="container">
-        <h1 class="display-5 fw-bold">Detailing profesional para tu <span class="text-acr">vehiculo</span></h1>
-        <p class="text-white-50">Distribuidores oficiales &middot; Costa Rica. Representantes exclusivos de las mejores marcas del mundo.</p>
-        <a class="btn btn-acr btn-lg mt-2" th:href="@{/productos}">Ver todos los productos</a>
+        <h1 class="display-5 fw-bold"><span th:text="#{home.hero.titulo1}">Detailing profesional para tu</span> <span class="text-acr" th:text="#{home.hero.titulo2}">vehiculo</span></h1>
+        <p class="text-white-50" th:text="#{home.hero.subtitulo}">Distribuidores oficiales &middot; Costa Rica. Representantes exclusivos de las mejores marcas del mundo.</p>
+        <a class="btn btn-acr btn-lg mt-2" th:href="@{/productos}" th:text="#{home.hero.boton}">Ver todos los productos</a>
     </div>
 </section>
 
 <div class="container my-5">
-    <h2 class="mb-4">Marcas oficiales</h2>
+    <h2 class="mb-4" th:text="#{home.marcas}">Marcas oficiales</h2>
     <div class="d-flex flex-wrap gap-2 mb-5">
-        <span th:each="m : ${marcas}" class="badge rounded-pill text-bg-dark border border-secondary px-3 py-2" th:text="${m.nombre}">Marca</span>
+        <a th:each="m : ${marcas}" th:href="@{/productos(idMarca=${m.idMarca})}"
+           class="badge rounded-pill badge-marca px-3 py-2" th:text="${m.nombre}">Marca</a>
     </div>
 
-    <h2 class="mb-4">Productos destacados</h2>
+    <h2 class="mb-4" th:text="#{home.destacados}">Productos destacados</h2>
     <div class="row g-4">
         <div class="col-6 col-md-4 col-lg-3" th:each="p : ${destacados}">
             <div class="card card-acr h-100">
